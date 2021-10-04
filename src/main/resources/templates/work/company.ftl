@@ -2,7 +2,7 @@
 <html lang="cn">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>角色管理表格</title>
+    <title>公司编码管理表格</title>
     <!-- jqGrid组件基础样式包-必要 -->
     <link href="${basePath!}/static/jqgrid/css/ui.jqgrid.css" type="text/css" media="screen" rel="stylesheet"/>
     <link href="${basePath!}/static/jqgrid/css/jquery-ui.css" type="text/css" media="screen" rel="stylesheet"/>
@@ -71,8 +71,11 @@
 
 <#--菜单权限设置弹窗-->
 <div  id="setpermisdiv" hidden="" class="layui-fluid" >
-    <ul id="treeDemo" class="ztree"></ul>
-    <button class="layui-btn" id="savesetpermis">保存权限设置</button>
+<#--    <ul id="treeDemo" class="ztree"></ul>-->
+    <div id="div" style="height: 360px; width: 220px;">
+
+    </div>
+    <button class="layui-btn" id="savesetpermis">保存</button>
     <button class="layui-btn" id="closesetpermis">关闭</button>
     <script type="text/javascript">
         $('#savesetpermis').on('click', function () {
@@ -437,37 +440,39 @@
             //创建jqGrid组件
             jQuery("#list2").jqGrid(
                 {
-                    caption: "角色管理",//表格的标题名字
+                    caption: "公司编码管理",//表格的标题名字
                     mtype: "post",//向后台请求数据的ajax的类型。可选post,get
-                    url: 'admin/role/list',
+                    url: 'work/company/list',
                     //url : 'static/jqgrid/data/JSONData.json',//组件创建完成之后请求数据的url
                     //styleUI: 'Bootstrap',
                     datatype: "json",//请求数据返回的类型。可选json,xml,txt
                     emptyrecords: "当前无记录",
-                    colNames: ['ID', '角色名称', '备注', '权限菜单设置'],//jqGrid的列显示名字
+                    colNames: ['系统编码', '公司名称', '公司简称','省/市级','时间','说明', '操作'],//jqGrid的列显示名字
                     colModel: [  //这里会根据index去解析jsonReader中root对象的属性，填充cell
-                        {name: 'id', index: 'id', width: 100, sortable: true, search: false},
-                        {name: 'name', index: 'name', width: 220, sortable: false,search: true,
-                            //被该列搜索时的搜索条件有哪些
-                            searchoptions: {sopt: ['eq']}
-                            /*
-                             //如果使用自定义按钮点击事件的方式进行记录增删改操作的话下面的配置可以去掉
-                            editable: true,
-                            editoptions: {size: "20", maxlength: "30"}//当执行修改和新增的操作时，会显示输入框，输入框的配置*/
-                        },
-                        {name: 'bz', index: 'bz', width: 400, sortable: false, search: false},
+
+
+                        {name: 'ouId', index: 'ouId', width: 60,align: "center", sortable: true, search: false},
+                        {name: 'oname', index: 'oname', width: 120, align: "center",sortable: true, search: false},
+                        {name: 'otext', index: 'otext', width: 80, align: "center", sortable: true, search: false},
+                        {name: 'oleve', index: 'oleve', width: 50,align: "center", sortable: true, search: false},
+                        {name: 'otime', index: 'otime', width: 80, align: "center",sortable: true, search: false},
+                        {name: 'otabout', index: 'otabout', width: 400, sortable: false, search: false},
                         {name: 'setpermis', index: 'setpermis', align: "center", width: 300, sortable: false, search: false}
+
                     ],
 
                     //在gridComplete事件中添加：
                     gridComplete: function () {
                         var ids = jQuery("#list2").jqGrid('getDataIDs');
                         for (var i = 0; i < ids.length; i++) {
-                            //alert(ids[i]);
                             var id = ids[i];
-                            // var editBtn = "<a href='javascript:void(0)' style='color:#f60' onclick='' >设置权限</a>";
+                            console.log(id)
+                            // var editBtn= '<button onclick="setrolelayer('+ids[i]+')" class="layui-btn layui-btn-radius layui-btn-xs" style="width:inherit;height: 85%">'+
+                            //     '<i class="layui-icon">&#xe642;</i>设置菜单权限'+
+                            //     '</button>';
+
                             var editBtn= '<button onclick="setrolelayer('+ids[i]+')" class="layui-btn layui-btn-radius layui-btn-xs" style="width:inherit;height: 85%">'+
-                                '<i class="layui-icon">&#xe642;</i>设置菜单权限'+
+                                '<i class="layui-icon">&#xe642;</i>修改'+
                                 '</button>';
 
                             jQuery("#list2").jqGrid('setRowData', ids[i], { setpermis: editBtn });
@@ -553,7 +558,7 @@
 
         $.ajax({
             type: "POST",
-            url:'admin/role/loadCheckMenuInfo?parentId=1&roleId='+id,
+            url:'work/company/searchById?CompanyId='+id,
             async: false,
             dataType: 'json',
             timeout: 1000,
@@ -562,14 +567,11 @@
                 layer.alert("与服务器连接失败/(ㄒoㄒ)/~~");
             },
             success: function(data) {
-                zNodes=data;
-
-                companyObject = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-
+                console.log(data);
                 layerid=layer.open({//开启表单弹层
                     skin: 'layui-layer-molv',
                     type: 1,
-                    title:'设置权限',
+                    title:'修改公司编码',
                     content: $('#setpermisdiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
                 });
 

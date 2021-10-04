@@ -34,7 +34,7 @@
         </javaTypeResolver>
 
         <!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="com.zjt.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.gwf.entity" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -49,7 +49,7 @@
                 type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zjt.mapper" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.gwf.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
