@@ -323,7 +323,7 @@
 <@com.body>
 
 <div  id="setpermisdiv" class="layui-fluid" >
-    <ul id="treeDemo" class="ztree"></ul>
+    <ul id="treeDemo" class="ztree" style="width: 100%; height: 100%"></ul>
 </div>
 
 
